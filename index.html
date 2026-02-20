@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mysterious Island</title>
+
+<style>
+body {
+background-image: url('https://media-cldnry.s-nbcnews.com/image/upload/newscms/2019_31/2951151/190729-jeffrey-epstein-island-drone-temple-2-ew-505p.jpg');
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+background-attachment: fixed;
+margin: 0;
+height: 100vh;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+color: #a60000;
+font-family: monospace;
+text-shadow: 2px 2px 12px rgba(0,0,0,0.9);
+overflow-x: hidden;
+}
+
+/* Dark overlay for cinematic feel */
+body::before {
+content: "";
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: linear-gradient(to bottom, rgba(60,0,0,0.6), rgba(20,0,0,0.85));
+z-index: -1;
+}
+
+h1 {
+font-size: 4rem;
+margin-bottom: 20px;
+letter-spacing: 3px;
+animation: glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+from { text-shadow: 0 0 10px #000, 0 0 20px #fc0303; }
+to { text-shadow: 0 0 20px #000, 0 0 40px #fc0303; }
+}
+
+.btn {
+padding: 15px 30px;
+font-size: 1.2rem;
+background-color: rgba(255, 255, 255, 0.15);
+color: white;
+border-radius: 50px;
+cursor: pointer;
+text-decoration: none;
+transition: 0.3s;
+backdrop-filter: blur(8px);
+border: 1px solid rgba(255,255,255,0.2);
+}
+
+.btn:hover {
+background-color: white;
+color: black;
+transform: scale(1.05);
+text-shadow: none;
+}
+
+/* Sidebar */
+.sidebar {
+position: fixed;
+left: -280px;
+top: 0;
+width: 250px;
+height: 100%;
+background: rgba(40, 0, 0, 0.4);
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px);
+transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+padding-top: 80px;
+z-index: 1000;
+display: flex;
+flex-direction: column;
+align-items: center;
+box-shadow: 10px 0 30px rgba(0,0,0,0.3);
+}
+
+.sidebar.active { left: 0; }
+
+.sidebar a {
+padding: 12px 20px;
+text-decoration: none;
+font-size: 1.1rem;
+color: white;
+width: 80%;
+text-align: center;
+margin-bottom: 15px;
+background: rgba(255, 255, 255, 0.15);
+border-radius: 50px;
+transition: 0.3s;
+border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar a:hover {
+background: rgba(255, 255, 255, 0.3);
+transform: scale(1.05);
+border-color: white;
+}
+
+/* Hamburger */
+.menu-icon {
+position: fixed;
+top: 25px;
+left: 25px;
+z-index: 1100;
+cursor: pointer;
+display: flex;
+flex-direction: column;
+gap: 6px;
+}
+
+.menu-icon div {
+width: 30px;
+height: 3px;
+background-color: white;
+transition: 0.4s;
+border-radius: 2px;
+}
+
+.menu-icon.open .bar1 { transform: translateY(9px) rotate(45deg); }
+.menu-icon.open .bar2 { opacity: 0; }
+.menu-icon.open .bar3 { transform: translateY(-9px) rotate(-45deg); }
+</style>
+</head>
+
+<body>
+
+<div class="menu-icon" id="menu-icon" onclick="toggleMenu()">
+<div class="bar1"></div>
+<div class="bar2"></div>
+<div class="bar3"></div>
+</div>
+
+<div class="sidebar" id="sidebar">
+<a href="#">Home</a>
+<a href="#">Chatroom</a>
+<a href="#">Settings</a>
+</div>
+
+<h1>Epstein's Island</h1>
+<a href="https://solarhubv2.vercel.app" class="btn">Enter Palace</a>
+
+<script>
+function toggleMenu() {
+document.getElementById('sidebar').classList.toggle('active');
+document.getElementById('menu-icon').classList.toggle('open');
+}
+</script>
+
+</body>
+</html>
