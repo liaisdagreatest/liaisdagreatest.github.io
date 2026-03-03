@@ -3,20 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Epstein's Island | Live Feed</title>
+    <title>Epstein's Island | Terminal</title>
+    <link rel="icon" type="image/x-icon" href="https://image2url.com/r2/default/images/1772555222158-d47e3bf4-ef4b-4234-b90f-9ab089fa996c.png">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&family=Space+Mono&display=swap" rel="stylesheet">
 
-    <style>
+    <style id="mainTheme">
         :root {
-            --accent-red: #a60000;
-            --glow-red: #fc0303;
+            --accent-color: #a60000;
+            --glow-color: #fc0303;
             --glass: rgba(255, 255, 255, 0.1);
             --glass-border: rgba(255, 255, 255, 0.2);
         }
 
+        /* This will be injected via JS when Israel is selected */
+        .blue-theme {
+            --accent-color: #005eb8 !important;
+            --glow-color: #00c6ff !important;
+        }
+
         body {
-            /* FIX 1: Set a dark base color so it never flashes white */
             background-color: #050000; 
             background-image: url('https://media-cldnry.s-nbcnews.com/image/upload/newscms/2019_31/2951151/190729-jeffrey-epstein-island-drone-temple-2-ew-505p.jpg');
             background-size: cover;
@@ -29,14 +35,13 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: var(--accent-red);
+            color: var(--accent-color);
             font-family: 'Space Mono', monospace;
             overflow: hidden;
-            /* Faster transition feels snappier and hides loading better */
-            transition: background-image 0.5s ease-in-out; 
+            transition: background-image 0.5s ease-in-out, color 0.5s ease; 
         }
 
-        /* Surveillance Scanner Animation */
+        /* Scanner line color also follows the theme */
         body::after {
             content: "";
             position: fixed;
@@ -44,8 +49,9 @@
             left: 0;
             width: 100%;
             height: 5px;
-            background: rgba(252, 3, 3, 0.2);
-            box-shadow: 0 0 15px rgba(252, 3, 3, 0.8);
+            background: var(--glow-color);
+            opacity: 0.2;
+            box-shadow: 0 0 15px var(--glow-color);
             z-index: 500;
             pointer-events: none;
             animation: scan 6s linear infinite;
@@ -60,7 +66,7 @@
             content: "";
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(20,0,0,0.85) 100%);
+            background: radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%);
             z-index: -1;
         }
 
@@ -74,11 +80,12 @@
             text-align: center;
             animation: glow 3s ease-in-out infinite alternate;
             z-index: 10;
+            transition: text-shadow 0.5s ease;
         }
 
         @keyframes glow {
-            from { text-shadow: 0 0 10px #000, 0 0 15px var(--glow-red); }
-            to { text-shadow: 0 0 20px #000, 0 0 35px var(--glow-red); }
+            from { text-shadow: 0 0 10px #000, 0 0 15px var(--glow-color); }
+            to { text-shadow: 0 0 20px #000, 0 0 35px var(--glow-color); }
         }
 
         .modal {
@@ -91,15 +98,16 @@
         }
 
         .modal-content {
-            background: rgba(25, 0, 0, 0.95);
+            background: rgba(10, 10, 10, 0.95);
             margin: 10% auto;
             padding: 35px;
-            border: 1px solid var(--glow-red);
+            border: 1px solid var(--glow-color);
             width: 90%;
             max-width: 400px;
             border-radius: 20px;
-            box-shadow: 0 0 60px rgba(252, 3, 3, 0.3);
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
             position: relative;
+            transition: border 0.5s ease;
         }
 
         .setting-item {
@@ -114,9 +122,9 @@
         select {
             width: 100%;
             padding: 12px;
-            background: #1a0000;
+            background: #111;
             color: white;
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--glow-color);
             border-radius: 8px;
             font-family: 'Space Mono', monospace;
             outline: none;
@@ -132,7 +140,7 @@
             text-decoration: none;
             transition: 0.4s;
             backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--glow-color);
             text-transform: uppercase;
             letter-spacing: 2px;
             z-index: 10;
@@ -143,7 +151,7 @@
         .sidebar {
             position: fixed;
             left: -300px; top: 0; width: 280px; height: 100%;
-            background: rgba(20, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(25px);
             transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             padding-top: 100px;
@@ -151,6 +159,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            border-right: 1px solid var(--glow-color);
         }
 
         .sidebar.active { left: 0; }
@@ -165,23 +174,27 @@
             background: var(--glass);
             border-radius: 8px;
             transition: 0.3s;
+            border: 1px solid transparent;
         }
 
-        .sidebar a:hover { background: var(--accent-red); transform: translateX(10px); }
+        .sidebar a:hover { 
+            background: var(--accent-color); 
+            border-color: var(--glow-color);
+            transform: translateX(10px); 
+        }
 
         .menu-icon { position: fixed; top: 30px; left: 30px; z-index: 1100; cursor: pointer; }
         .menu-icon div { width: 30px; height: 2px; background-color: white; margin: 6px 0; transition: 0.4s; }
-        
         #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 900; }
     </style>
 </head>
-<body>
+<body id="mainBody">
 
 <div id="overlay" onclick="toggleMenu()"></div>
 
 <div id="settingsModal" class="modal">
     <div class="modal-content">
-        <h2 style="font-family: 'Inter'; color: white; margin-top: 0; letter-spacing: -1px;">TERMINAL CONFIG</h2>
+        <h2 style="font-family: 'Inter'; color: white; margin-top: 0;">TERMINAL CONFIG</h2>
         
         <div class="setting-item">
             <label>SATELLITE VIEW</label>
@@ -190,6 +203,7 @@
                 <option value="https://image2url.com/r2/default/images/1772486303978-75f9d582-5353-47e9-aa09-7f14048e3cd6.png">Epstein</option>
                 <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/EFTA00001459_-_Large_painting_of_Bill_Clinton_in_a_blue_dress_hangs_on_the_wall_next_to_a_desk_with_tools_and_supplies.jpg/960px-EFTA00001459_-_Large_painting_of_Bill_Clinton_in_a_blue_dress_hangs_on_the_wall_next_to_a_desk_with_tools_and_supplies.jpg">Bill Clinton</option>
                 <option value="https://ichef.bbci.co.uk/ace/standard/976/cpsprodpb/4E2B/production/_107811002_gettyimages-700334384.jpg">Jeff & Friends</option>
+                <option value="https://upload.wikimedia.org/wikipedia/commons/d/d4/Flag_of_Israel.svg">Israel</option>
             </select>
         </div>
 
@@ -216,18 +230,18 @@
 <a href="https://solarhubv2.vercel.app" class="btn">Enter Palace</a>
 
 <script>
-    // FIX 2: Preload images as soon as the page script runs
+    const israelFlag = "https://upload.wikimedia.org/wikipedia/commons/d/d4/Flag_of_Israel.svg";
+    
+    // Preload Logic
     const imagesToPreload = [
         "https://media-cldnry.s-nbcnews.com/image/upload/newscms/2019_31/2951151/190729-jeffrey-epstein-island-drone-temple-2-ew-505p.jpg",
         "https://image2url.com/r2/default/images/1772486303978-75f9d582-5353-47e9-aa09-7f14048e3cd6.png",
         "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/EFTA00001459_-_Large_painting_of_Bill_Clinton_in_a_blue_dress_hangs_on_the_wall_next_to_a_desk_with_tools_and_supplies.jpg/960px-EFTA00001459_-_Large_painting_of_Bill_Clinton_in_a_blue_dress_hangs_on_the_wall_next_to_a_desk_with_tools_and_supplies.jpg",
-        "https://ichef.bbci.co.uk/ace/standard/976/cpsprodpb/4E2B/production/_107811002_gettyimages-700334384.jpg"
+        "https://ichef.bbci.co.uk/ace/standard/976/cpsprodpb/4E2B/production/_107811002_gettyimages-700334384.jpg",
+        israelFlag
     ];
 
-    imagesToPreload.forEach(url => {
-        const img = new Image();
-        img.src = url;
-    });
+    imagesToPreload.forEach(url => { const img = new Image(); img.src = url; });
 
     function toggleMenu() {
         const sidebar = document.getElementById('sidebar');
@@ -245,18 +259,26 @@
     }
 
     function changeWallpaper(imageUrl) {
-        document.body.style.backgroundImage = `url('${imageUrl}')`;
+        const body = document.getElementById('mainBody');
+        body.style.backgroundImage = `url('${imageUrl}')`;
+
+        // Check if selected is Israel
+        if (imageUrl === israelFlag) {
+            body.classList.add('blue-theme');
+        } else {
+            body.classList.remove('blue-theme');
+        }
     }
 
     function toggleScanner(isVisible) {
-        const style = document.createElement('style');
-        style.id = "scannerStyle";
+        const existing = document.getElementById("scannerStyle");
         if (!isVisible) {
+            const style = document.createElement('style');
+            style.id = "scannerStyle";
             document.head.appendChild(style);
             style.innerHTML = "body::after { display: none; }";
-        } else {
-            const existingStyle = document.getElementById("scannerStyle");
-            if(existingStyle) existingStyle.remove();
+        } else if(existing) {
+            existing.remove();
         }
     }
 
